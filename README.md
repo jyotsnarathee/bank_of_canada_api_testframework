@@ -84,6 +84,11 @@ To run tests in headless mode (useful for CI/CD pipelines), execute:
 bash
 Copy
 npx cypress run
+
+For running the reports
+bash
+npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator cypress-mochawesome-reporter
+
 Custom Commands
 The custom command getObservations is defined in cypress/support/commands.js and is used to fetch observations from the Bank of Canada Valet API. It embeds the series code in the URL path and appends /json, while passing recent_weeks as a query parameter.
 
