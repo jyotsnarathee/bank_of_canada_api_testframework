@@ -1,12 +1,9 @@
 describe('Bank of Canada Valet API Tests', () => {
   const validSeries = 'FXCADUSD';
+  const invalidSeries = 'INVALID_SERIES';
 
   it('Positive: Calculate average CAD to USD rate for the recent 10 weeks', () => {
-    cy.request({
-      method: 'GET',
-      url: `/valet/observations/${validSeries}/json`,
-      qs: { recent_weeks: 10 }
-    }).then((response) => {
+    cy.getObservations(validSeries, 10).then((response) => {
       // Validate status and that observations exist
       expect(response.status).to.eq(200);
       expect(response.body).to.have.property('observations');
@@ -34,12 +31,7 @@ describe('Bank of Canada Valet API Tests', () => {
   });
 
   it('Negative: Handle invalid series code gracefully', () => {
-    cy.request({
-      method: 'GET',
-      url: `/valet/observations/INVALID_SERIES/json`,
-      qs: { recent_weeks: 10 },
-      failOnStatusCode: false // Allow the request to complete even if it fails
-    }).then((response) => {
+    cy.getObservations(invalidSeries, 10, { failOnStatusCode: false }).then((response) => {
       // Assert that the status is not 200 and that an error is returned
       expect(response.status).to.eq(404);
       expect(response.body).to.have.property("message");

@@ -21,7 +21,8 @@ This lightweight API automation framework is built using Cypress and JavaScript.
 ## Overview
 
 This project demonstrates how to build a modular and efficient API automation framework using Cypress. It covers both a positive and a negative test cases for the Bank of Canada Valet API, ensuring the API response's accuracy and reliability. 
-version 1 - As new to Cypress, just ran the tests without using any functions/methods for increased usability.
+Version 1 - Being new to Cypress, just ran the tests without using any functions/methods for increased usability.
+Version 2- Added a fucntion getObservations and used it for positive and negative scenario. Also, added the HTML report using reporting library Mochawesome.
 
 ## Project Structure
 
