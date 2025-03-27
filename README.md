@@ -21,7 +21,7 @@ This lightweight API automation framework is built using Cypress and JavaScript.
 ## Overview
 
 This project demonstrates how to build a modular and efficient API automation framework using Cypress. It covers both a positive and a negative test cases for the Bank of Canada Valet API, ensuring the API response's accuracy and reliability. 
-Initial Commit - Being new to Cypress, just ran the tests without using any functions/methods for increased usability.
+Initial Commit - Being new to Cypress, just ran the tests without using any functions/methods(added functions to reusability later).
 2nd Commit - Added a fucntion getObservations and used it for positive and negative scenario. Also, added the HTML report using reporting library Mochawesome.
 3rd Commit - Added more series for positive scenarios and added other negative scenarios. Also, added the schema response validation code using chai library (Chai-json-schema provides a convenient way to integrate JSON schema validation directly into your Chai assertions, making your tests cleaner and more maintainable.)
 4th Commit - Added Excel file to get data for series and range instead of getting data for different series from Code. It is easy to add or change data for tests in excel file.Also, added negative scenario for 500 internal server error by simulating the error message and for 405 error i have added the commented code.
@@ -31,8 +31,8 @@ Initial Commit - Being new to Cypress, just ran the tests without using any func
 1) The error messages on Swagger page is differnt when we run the API
 Like on swagger if we give wrong input, then actually we get the message - "Bad recent observations request parameters, must be numeric"
 But on swagger message says - "Error: Verify your inputs and run the request again"
-Have used the actaul message in my tests as of now. But in actual will talk to devs, to correct the message.
-2) Also, when i try to run the API with POST, i get status code as 200, which is not expected. I have commented that code as of now. This has to be discussed wuth devs too.
+Have used the actaul message in my tests as of now. But I will talk to devs, to correct the message in swagger as the other message is more clear.
+2) Also, when i try to run the API with POST, i get status code as 200, which is not expected ( Expected 405 ). I have commented that code as of now. This has to be discussed with devs too.
 
 
 
