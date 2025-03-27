@@ -7,6 +7,7 @@
         "cypress:open": "cypress open"
     },
     "devDependencies": {
+        "chai-json-schema": "^1.5.1",
         "cypress": "^14.2.0",
         "cypress-mochawesome-reporter": "^3.8.2",
         "mochawesome": "^7.1.3",

@@ -1,0 +1,65 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Bank of Canada Valet API Response Schema",
+    "type": "object",
+    "required": ["terms", "seriesDetail", "observations"],
+    "properties": {
+      "terms": {
+        "type": "object",
+        "required": ["url"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "seriesDetail": {
+        "type": "object",
+        "patternProperties": {
+          "^FX[A-Z]{6}$": {
+            "type": "object",
+            "required": ["label", "description", "dimension"],
+            "properties": {
+              "label": { "type": "string" },
+              "description": { "type": "string" },
+              "dimension": {
+                "type": "object",
+                "required": ["key", "name"],
+                "properties": {
+                  "key": { "type": "string" },
+                  "name": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "observations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["d"],
+          "properties": {
+            "d": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "patternProperties": {
+            "^FX[A-Z]{6}$": {
+              "type": "object",
+              "required": ["v"],
+              "properties": {
+                "v": { "type": "string" }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+  
