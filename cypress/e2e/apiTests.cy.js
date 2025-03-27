@@ -1,23 +1,33 @@
 describe('Bank of Canada Valet API Tests', () => { 
+  //Load the excel data using cy.task
   // Load the schema using cy.fixture in test files and use it with JSON schema validation assertions.
   let forexSchema;
-
-  before(() => {
-    cy.fixture('forexSchema.json').then((schema) => {
-      forexSchema = schema;
+  let seriesData;
+  before(() =>  {
+    // Chain the tasks so that both operations complete before tests run
+    return cy.task('readExcel').then((data) => {
+      seriesData = data;
+      cy.log('Excel data loaded: ' + JSON.stringify(seriesData));
+    }).then(() => {
+      return cy.fixture('forexSchema.json').then((schema) => {
+        forexSchema = schema;
+        cy.log('Loaded schema: ' + JSON.stringify(schema));
+      });
     });
   });
 
-  const validseriesData = [
-    { series: 'FXCADUSD', range: [0.5, 1.5] },
-    { series: 'FXEURCAD', range: [1.0, 2.0] },
-    { series: 'FXAUDCAD', range: [0.5, 1.5] }
-    // You can add more series as needed
-  ];
+  it('Positive: Calculate average for series for the recent 10 weeks', () => {
+    
+      // Ensure the Excel data has been loaded
+      if (!seriesData || !seriesData.length) {
+        throw new Error('No data loaded from Excel file');
+      }
 
-  validseriesData.forEach(({ series, range }) => {
-  it('Positive: Calculate average for series ${series} for the recent 10 weeks', () => {
-    cy.getObservations(series, 10).then((response) => {
+      // Iterate over each row in the Excel file to run tests
+    seriesData.forEach((row) => {
+      cy.log(`Testing series: ${row.series}`);
+
+    cy.getObservations(row.series, 10).then((response) => {
       // Validate status and that observations exist
       expect(response.status).to.eq(200);
       expect(response.body).to.have.property('observations');
@@ -30,23 +40,24 @@ describe('Bank of Canada Valet API Tests', () => {
       // Calculate average rate over all returned observations
       let sum = 0;
       observations.forEach((obs) => {
-        expect(obs).to.have.property(series);
+        expect(obs).to.have.property(row.series);
         // Each observation for the series is expected in the format: { v: "value" }
-        const rateStr = obs[series].v;
+        const rateStr = obs[row.series].v;
         const rate = parseFloat(rateStr);
         expect(rate).to.be.a('number').and.to.be.gt(0);
         sum += rate;
       });
 
       const averageRate = sum / observations.length;
-      cy.log(`Average for ${series} for recent 10 weeks: ${averageRate}`);
+      cy.log(`Average for ${row.series} for recent 10 weeks: ${averageRate}`);
 
       // Assertion: check that the average is within a realistic range (adjust as needed)
-      expect(averageRate).to.be.within(range[0], range[1]);
+     expect(averageRate).to.be.within(parseFloat(row.minRange), parseFloat(row.maxRange));
     });
   });
 });
 });
+
 
 describe('Bank of Canada Valet API Negative Tests', () => {
 
@@ -111,5 +122,31 @@ describe('Bank of Canada Valet API Negative Tests', () => {
           expect(valuetest).to.eq("The page you are looking for is unavailable.") 
       });
     });
+
+    it('Negative: Should return 500 Internal Server Error via simulation', () => {
+      // Intercept the API request and simulate a 500 error
+      cy.request({
+        method: 'GET',
+        url: '/valet/observations/FXCADUSD/json',
+        qs: { recent_weeks: 10 },
+        failOnStatusCode: false,
+        simulate500: true  // custom flag to trigger the simulation
+      }).then((response) => {
+        expect(response.status).to.eq(500);
+        expect(response.body).to.have.property('error', 'Internal Server Error');
+      });
+    });
+/*
+    it('should return error when using POST instead of GET', () => {
+      cy.request({
+        method: 'POST',
+        url: `/valet/observations/FXCADUSD/json`,
+        qs: { recent_weeks: 10 },
+        failOnStatusCode: false
+      }).then((response) => {
+        expect(response.status).to.eq(405); // Expect 405 Method Not Allowed, or another appropriate error
+      });
+    });
+*/
   });  
 
