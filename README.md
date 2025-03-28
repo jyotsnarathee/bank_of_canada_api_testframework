@@ -25,6 +25,7 @@ Initial Commit - Being new to Cypress, just ran the tests without using any func
 2nd Commit - Added a fucntion getObservations and used it for positive and negative scenario. Also, added the HTML report using reporting library Mochawesome.
 3rd Commit - Added more series for positive scenarios and added other negative scenarios. Also, added the schema response validation code using chai library (Chai-json-schema provides a convenient way to integrate JSON schema validation directly into your Chai assertions, making your tests cleaner and more maintainable.)
 4th Commit - Added Excel file to get data for series and range instead of getting data for different series from Code. It is easy to add or change data for tests in excel file.Also, added negative scenario for 500 internal server error by simulating the error message and for 405 error i have added the commented code.
+5th Commit - Added utility to add one more assertion that response has only 10 weeks data.
 
 # Observations
 
