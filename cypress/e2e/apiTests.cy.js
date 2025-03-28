@@ -1,3 +1,5 @@
+import { isWithinTenWeeks } from '../support/utils';
+
 describe('Bank of Canada Valet API Tests', () => { 
   //Load the excel data using cy.task
   // Load the schema using cy.fixture in test files and use it with JSON schema validation assertions.
@@ -36,6 +38,11 @@ describe('Bank of Canada Valet API Tests', () => {
       
       const observations = response.body.observations;
       expect(observations).to.be.an('array');
+
+      // Use the utility function to check if the date range is within 10 weeks
+      const withinTenWeeks = isWithinTenWeeks(observations);
+      cy.log(`Date range within 10 weeks for ${row.series}: ${withinTenWeeks}`);
+      expect(withinTenWeeks).to.be.true;
       
       // Calculate average rate over all returned observations
       let sum = 0;
